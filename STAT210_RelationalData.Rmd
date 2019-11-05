@@ -1,0 +1,81 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+##### **Chapter 13**
+
+###### **13.1**
+
+* Multiple tables of data are called relational data
+
+* Three families of verbs designed to work with relational data:
+    + Mutating joins, which add new variables to one data frame from matching observations in another.
+    + Filtering joins, which filter observations from one data frame based on whether or not they match an observation in the other table.
+    + Set operations, which treat observations as if they were set elements.
+
+```{r, include=FALSE}
+library(tidyverse)
+install.packages("nycflights13")
+library(nycflights13)
+```
+
+
+###### **13.2**
+
+* For nycflights13:
+    + flights connects to planes via a single variable, tailnum.
+    + flights connects to airlines through the carrier variable.
+    + flights connects to airports in two ways: via the origin and dest variables.
+    + flights connects to weather via origin (the location), and year, month, day and hour (the time).
+
+###### **13.3**
+
+* There are two types of keys:
+    + A primary key uniquely identifies an observation in its own table. For example, planes$tailnum is a primary key because it uniquely identifies each plane in the planes table.
+    + A foreign key uniquely identifies an observation in another table. For example, the flights$tailnum is a foreign key because it appears in the flights table where it matches each flight to a unique plane.
+
+###### **13.4**
+
+* A mutating join allows you to combine variables from two tables. It first matches observations by their keys, then copies across variables from one table to the other.
+
+```{r}
+x <- tribble(
+  ~key, ~val_x,
+     1, "x1",
+     2, "x2",
+     3, "x3"
+)
+y <- tribble(
+  ~key, ~val_y,
+     1, "y1",
+     2, "y2",
+     4, "y3"
+)
+
+x %>% 
+  inner_join(y, by = "key")
+left_join(x, y, by = "key")
+```
+
+
+###### **13.5**
+
+* Filtering joins
+    + semi_join(x, y) keeps all observations in x that have a match in y.
+    + anti_join(x, y) drops all observations in x that have a match in y.
+
+###### **13.6**
+
+* Real data will never be clean. Problems will be expected
+
+###### **13.7**
+
+* Set operations (used least frequently)
+    + intersect(x, y): return only observations in both x and y.
+    + union(x, y): return unique observations in x and y.
+    + setdiff(x, y): return observations in x, but not in y.
+
+
+
+
